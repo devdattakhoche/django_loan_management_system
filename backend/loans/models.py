@@ -1,4 +1,5 @@
 from backend.loan_management.constants import LOAN_STATUS_MAPPING
+from django.contrib.auth import get_user_model
 from django.db import models
 
 
@@ -11,6 +12,9 @@ class ProductMapping(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def __str__(self) -> str:
+        return self.product_name
+
 
 class Loans(models.Model):
 
@@ -19,6 +23,8 @@ class Loans(models.Model):
         ("Rejected", LOAN_STATUS_MAPPING["REJECTED"]),
         ("New", LOAN_STATUS_MAPPING["NEW"]),
     ]
+
+    User = get_user_model()
 
     loan_id = models.BigAutoField(primary_key=True)
     interest_rate = models.IntegerField(default=10)
@@ -30,3 +36,7 @@ class Loans(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     product = models.ForeignKey(to=ProductMapping, on_delete=models.CASCADE)
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+
+    def __str__(self) -> str:
+        return self.user.username
