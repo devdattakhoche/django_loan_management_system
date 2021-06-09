@@ -16,7 +16,7 @@ class ProductMapping(models.Model):
         return self.product_name
 
 
-class Loans(models.Model):
+class Loan(models.Model):
 
     status_choices = [
         ("Approved", LOAN_STATUS_MAPPING["APPROVED"]),
@@ -37,6 +37,14 @@ class Loans(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     product = models.ForeignKey(to=ProductMapping, on_delete=models.CASCADE)
     user = models.ForeignKey(to=User, on_delete=models.CASCADE)
+    agent = models.ForeignKey(to=User, on_delete=models.SET_NULL)
+
+    def save(self, *args, **kwargs):
+        r = self.interest_rate / (100 * 12)
+        self.emi = (
+            self.amount * r * ((1 + r) ** self.tenure) / ((1 + r) ** self.tenure - 1)
+        )
+        super(Loans, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.user.username
