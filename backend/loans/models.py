@@ -1,4 +1,4 @@
-from backend.loan_management.constants import LOAN_STATUS_MAPPING
+from loan_management.constants import LOAN_STATUS_MAPPING
 from django.contrib.auth import get_user_model
 from django.db import models
 
@@ -36,15 +36,17 @@ class Loan(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     product = models.ForeignKey(to=ProductMapping, on_delete=models.CASCADE)
-    user = models.ForeignKey(to=User, on_delete=models.CASCADE)
-    agent = models.ForeignKey(to=User, on_delete=models.SET_NULL)
+    user = models.ForeignKey(to=User, on_delete=models.CASCADE, related_name="user")
+    agent = models.ForeignKey(
+        to=User, on_delete=models.SET_NULL, null=True, related_name="agent"
+    )
 
     def save(self, *args, **kwargs):
         r = self.interest_rate / (100 * 12)
         self.emi = (
             self.amount * r * ((1 + r) ** self.tenure) / ((1 + r) ** self.tenure - 1)
         )
-        super(Loans, self).save(*args, **kwargs)
+        super(Loan, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
         return self.user.username
