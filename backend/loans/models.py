@@ -12,6 +12,9 @@ class ProductMapping(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    def get_product_from_id(product_id: int):
+        return ProductMapping.objects.get(product_id=product_id)
+
     def __str__(self) -> str:
         return self.product_name
 
@@ -19,9 +22,10 @@ class ProductMapping(models.Model):
 class Loan(models.Model):
 
     status_choices = [
-        ("Approved", LOAN_STATUS_MAPPING["APPROVED"]),
-        ("Rejected", LOAN_STATUS_MAPPING["REJECTED"]),
-        ("New", LOAN_STATUS_MAPPING["NEW"]),
+        ("Approved", "Approved"),
+        ("Rejected", "Rejected"),
+        ("New", "New"),
+        ("Awaited", "Awaited"),
     ]
 
     User = get_user_model()
@@ -31,8 +35,8 @@ class Loan(models.Model):
     amount = models.BigIntegerField(null=False, blank=False, default=1000)
     emi = models.IntegerField(null=False, default=0, blank=False)
     tenure = models.IntegerField(null=False, default=12, blank=False)
-    status = models.IntegerField(choices=status_choices, default=3)
-    extra_details = models.JSONField()
+    status = models.CharField(choices=status_choices, max_length=20)
+    extra_details = models.JSONField(default=dict)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     product = models.ForeignKey(to=ProductMapping, on_delete=models.CASCADE)
@@ -42,11 +46,17 @@ class Loan(models.Model):
     )
 
     def save(self, *args, **kwargs):
-        r = self.interest_rate / (100 * 12)
-        self.emi = (
-            self.amount * r * ((1 + r) ** self.tenure) / ((1 + r) ** self.tenure - 1)
-        )
+        if self.pk == None:
+            self.status = "New"
+            self.interest_rate = int(self.product.prodcut_interest)
+            r = self.interest_rate / (100 * 12)
+            self.emi = (
+                int(self.amount)
+                * r
+                * ((1 + r) ** int(self.tenure))
+                / ((1 + r) ** int(self.tenure) - 1)
+            )
         super(Loan, self).save(*args, **kwargs)
 
     def __str__(self) -> str:
-        return self.user.username
+        return self.user.name

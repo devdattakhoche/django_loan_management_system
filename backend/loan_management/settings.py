@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "loans",
     "users",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -124,7 +125,12 @@ STATIC_URL = "/static/"
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
+from django.urls import reverse_lazy
 
+LOGIN_URL = reverse_lazy("login")
+LOGIN_REDIRECT_URL = reverse_lazy("home")
+LOGOUT_REDIRECT_URL = LOGIN_URL
 AUTH_USER_MODEL = "users.User"

@@ -14,7 +14,7 @@ def authenticate_req(**options):
             user = request.user
             if not request.user.is_authenticated:
                 return redirect("%s?next=%s" % (settings.LOGIN_URL, request.path))
-            if user.roles not in roles_required:
+            if len(roles_required) and user.role not in roles_required:
                 raise PermissionDenied
             return func(request, user, *args, **kwargs)
 

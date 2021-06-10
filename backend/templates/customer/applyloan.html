@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Apply loan</title>
+</head>
+
+<body>
+    <form action="" method="POST">
+        {% csrf_token %}
+        <input type="number" placeholder="Amount" name="amount" />
+        <select name="product_id">
+            {% for i in product %}
+            <option value="{{i.product_id}}">{{i.product_name}}</option>
+            {% endfor %}
+        </select>
+        <input type="number" placeholder="tenure" name="tenure" />
+        <button type="submit">
+            Submit
+        </button>
+    </form>
+</body>
+
+</html>
