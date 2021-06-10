@@ -1,5 +1,4 @@
 from django.http.response import JsonResponse
-from django.shortcuts import render_to_response
 from django.views.decorators.http import require_GET
 from loans.models import Loan
 from users.decorators import authenticate_req
