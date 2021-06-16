@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <form action="" method="POST" enctype=multipart/form-data>
+        {% csrf_token %}
+        <input type="file" name="filename" multiple>
+        <Button name='multiple'  type="submit"> Submit</Button>
+      </form> 
+
+    <form action="" method="POST" enctype=multipart/form-data>
+        {% csrf_token %}
+        <input type="file" name="filename">
+        <Button name='single' type="submit"> Submit</Button>
+      </form> 
+      
+</body>
+</html>

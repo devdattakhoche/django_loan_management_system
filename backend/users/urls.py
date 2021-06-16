@@ -21,6 +21,8 @@ urlpatterns += [
     path("loanlist", admin.loanlist, name="loanlist"),
     path("customerlist", admin.customerlist, name="customerlist"),
     path("agentloanlist/<int:id>", admin.agentloanlist, name="agentloanlist"),
+    path("uploadfiles", admin.upload_files, name="uploadfiles"),
+    path("getfiles", admin.get_files, name="getfile"),
 ]
 
 # agent

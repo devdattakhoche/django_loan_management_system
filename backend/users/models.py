@@ -5,6 +5,10 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
 
+class UploadFile(models.Model):
+    file = models.FileField(upload_to="pdf/files")
+
+
 class UserManager(BaseUserManager):
     def create_user(self, email, password=None, **kwargs):
         user = self.model(email=email, **kwargs)
@@ -36,7 +40,6 @@ class User(AbstractUser):
     email = models.EmailField(_("email"), unique=True)
     user_id = models.BigAutoField(primary_key=True, unique=True, null=False)
     username = models.CharField(default=None, null=True, max_length=10)
-    name = models.CharField(max_length=20, null=True)
     role = models.CharField(choices=roles, default="Customer", max_length=20)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
